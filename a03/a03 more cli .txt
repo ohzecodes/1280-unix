@@ -1,0 +1,198 @@
+
+Do not include name or student ID.
+
+Submit via your handin repository on gitlab before the deadline.
+Ensure that you have submitted the repository's URL via the d2l quiz.
+
+Deadline: 2019-10-03 23:55:00 -07:00
+Late Deadline: none
+
+----- Grading -----
+[/86] TOTAL
+	[/16] q1
+	[/27] q2-5
+	[/21] q6-9
+	[/12] q10-11
+	[/10] q12
+	[/-10] not a plain text file
+	[/-10] missing shasums
+--------------------
+
+For all of these questions, you may NOT use:
+	grep, sed, awk, or perl
+	if, for, while, until, case, or read
+
+For all questions that provide a partial shasum, you must provide BOTH the command AND the shasum of the output.
+
+--------------------
+
+q01) [16; 2 each] Give a GLOB (no grep or regular expressions) that matches filenames that:
+
+	a) contain an 'a', 'b', or 'c'
+		*[abc]*
+
+
+	b) contain some character that is not an 'a', 'b', or 'c'
+			[^abc]
+
+
+	c) contain an 'a', 'b', or 'c' at some position other than the first or last character
+		eg: MATCH: aaa, acc, xax, xaa; NOT MATCH: axb,bxc
+		[^abc]*[abc]*[^abc]
+
+
+	d) contain an 'a', 'b', or 'c', but none of 'a', 'b', or 'c' are the first or last character
+		eg: MATCH: xax, xabcx; NO MATCH: aabcx, xaa
+		
+		[^abc]*[abc]*[^abc]
+
+
+	e) contain at least 2 'a's
+		*a*a*
+
+
+	f) contain at least 2 'a's where there is exactly one non-'a' character between them
+		*a[^a]a*
+
+
+	g) contain at least 2 'a's with any number of any characters between them, 
+	but at least one character between them must not be an 'a'
+		*a*[^a]*a*
+
+
+	h) match log files created in January 2014, where filenames start with a date in ISO-8601 date format, and end in a '.log' extension.
+		find -iname *.log 
+	..
+
+
+q02) [6] Give a command to output the difference between the number of lower case letters in the books corpus compared to the number of upper case characters in the books corpus. ie: how many more lower case letters there are than upper case letters. (http://mylinux.langara.ca/~jhilliker/1280/books.tar.bz2) [shasum begins: 9]
+		echo $(( `cat * |tr -cd  [:lower:] | wc -c` - `cat * |tr -cd  [:upper:] | wc -c`  )) 
+		998ce9a65a21d6565d6f6fdfbf8210e5c7e4fe9b  
+	..
+q03) [7] Give a command to display the average file size (rounded down) of the books corpus. Use only: cat, echo, ls, wc, and shell meta-characters. [shasum begins: 6]
+		echo $((`cat * | wc -c` /`ls -1|wc -l` )) 
+		6587f9301deb29466f321e3c1eb3ecbc24f314de
+	..
+
+q04) [10] Give a command to calculate the total file size of all the books in the books corpus (the sum of their file sizes). 
+You may only use the following commands: cut, echo, eval, head, ls, tail, tr, and any shell meta-characters.
+Note: this should work for a variable number of files -- do not restrict it to only working with 15 files. [shasum begins: 8]
+
+	echo $((`ls -l | tr -s ' ' | cut -d " " -f 5 | tr "\n" + | head -c -1 | tail -c +2`)) |shasum
+	8095a49cfec34936a1f8f152f95da9eb68116060 
+..
+	
+q05) [4]
+	a) [3] Give a command that will display the contents of the variable "word" followed by the character "s", followed by the contents of the variable "words", followed by the string "$word". No spaces.
+	eg: if word=foo and words=bar, then the result should be: foosbar$word
+	
+		echo "$word"s'$words'
+	..
+
+
+	b) [1] Same as above, but handle the last element, "$word" literal, differently.
+		eval echo "$word"s'$words' 
+	..
+
+..
+
+q06) [4] Give a command to run "foo" such that its output 
+		is piped into the program "pout" and its errors are piped 
+		into the program "perr",  and that all output from "pout" 
+		is on stdout, 
+		and all output from "perr" is on standard error.  
+		Use file stream replication. Do not use named pipes.
+
+	foo.sh &1>pout &2>perr |  pout>&1
+..
+
+q07) [8] Give a command that will run the program "work" on a weekday, and the program "play" on the weekend. Ensure that only one will run.
+
+	[ `date +%a` = Sat ] || [ `date +%a` = Sun ]&& play.sh || work.sh  
+..
+
+
+q08) [5] Give a single command to run the following programs under the following conditions: 
+always run "build". 
+If build succeeds, run "test". 
+If "test" succeeds, run "run". 
+If "run" succeeds, the exit status of the whole command should be success. 
+If "run" fails, run "runfail", and the exit status of the command should be failure. 
+If "test" fails, run "testfail" and do not run "run" or "runfail", and the exit status should be failure. If "build" fails, run "buildfail", and do not run "test," "testfail," "run", or "runfail," and the exit status should be failure. Please format your answer nicely.
+
+
+ 	([build] && [test] || [testfail] )  && [run] || runfail  
+
+..
+
+
+q09) [4] Suppose you are writing an automated test.  The following files exist:
+	"foo", the program under test
+	"foo.1.in", the test's stdin
+	"foo.1.out.exp", the expected stdout
+	"foo.1.err.exp", the expected stderr
+
+	Run "foo" (only once) with the given input, and compare its actual outputs with the expected outputs.
+	"foo" is expected to exit with success, and the outputs are expected to match.
+	Always test all 3 conditions.
+	Display the diff of the outputs if they do not match.
+	Exit failure if any of the 3 tests fail.
+	Use "foo.1.out.act" and "foo.1.err.act" as temporary files to hold the actual outputs of foo.
+
+
+
+
+q10) [6] the file "a03.q10.txt" contains two columns of numbers. Give a command that will list the numbers (in ascending order) that appear in both columns. Do not use temporary files. Use process substitution. [shasum begins: 4]
+
+	cat a03.q10.txt | tr  "\t" "\n"  |sort -n | uniq -d 
+	4c15f56696b50eceab7329532ddba55f746cc09d
+
+
+
+q11) [6]
+	a) [4] The file "a03.q11.d3" [shasum begins: 30] is the result of running "diff -u1 a03.q11.d1 a03.q11.d2 > a03.q11.d3". 
+	Use this information to reconstruct the reported region of "a03.q11.d1" [shasum begins: e] and "a03.q11.d2" [shasum begins: 7]. 
+	Submit the 3 files, and give their shasums here. (run: shasum -t a03.q11.d?).
+	 		
+			a03.q11.d1   ecc72cbb18b3ee1237ebe93d608e10b834152474 
+			a03.q11.d2   7c74002127ee01bb9794516ea5c4389a24124d79 
+			a03.q11.d3   30c9e9236c002b740f087c612213fe769ef4b432
+
+	b) [2] Does "a03.q11.d3" hold enough information to reconstruct all of "a03.q11.d1" and "a03.q11.d2"? Briefly explain why or why not.
+		yes, because it contain +, or - therefore we can get the contents of files.
+
+
+
+q12) [10; 2 each] Run "a03.q12.sh" to set up the test directory. You must pipe the output of find into sort to get the correct shasum. Ensure yours matches the one given below.
+	eg:
+	rm -rf dir && ./a03.q12.sh && cd dir;
+	find | sort | shasum
+	f37eaf415456110017710945b9d6ff24614c8946  -
+
+	Give a find command to display all:
+
+	a) the files larger than 2 kilobytes. [shasum begins: d]
+
+		find . -type f -size +2000 
+		da39a3ee5e6b4b0d3255bfef95601890afd80709  
+	..	
+
+	b) the files last modified more than 1 year ago (assume 365 days per year). [4]
+
+		find . -type f -mtime -365
+		4f2168d8e28e132d37653979bae29084db560201 
+
+	..	
+
+	c) the files last modified between 6 and 12 months ago (assume 30 days per month). [f]
+
+
+
+
+	d) 2nd level directories (subdirectories of directories). [4]
+
+
+
+	e) the files that contain an "e" in their name, that also are in or under a directory with an "o" in it's name. [cc]
+	
+		

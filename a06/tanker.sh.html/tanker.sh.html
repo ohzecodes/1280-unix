@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<p>Write an sh script, tanker.sh, that simulates a storage tank being filled and drained.</p>
+<ul>
+<li>accept one command line argument: a number representing the maximum storage capacity of the tank</li>
+<li>starts the tank as empty, and as neither filling nor draining</li>
+<li>upon receiving the USR1 signal, the tank begins to fill at a rate of 1 unit per second</li>
+<li>upon receiving the USR2 signal, the tank begins to drain at a rate of 1 unit per second</li>
+<li>while filling or draining, the tank should print its state, once per second</li>
+<li>upon receiving the INT signal, the tank stops filling or draining</li>
+<li>the tank cannot be both filling and draining at the same time, it can only be one or the other, or neither</li>
+<li>on any state change, the tank should print a status message</li>
+<li>if the tank overflows, the script exits with failure</li>
+<li>if the tank empties, the script exits with failure</li>
+<li>upon receiving TERM, the program exits with success (assuming it has not overflowed or drained)</li>
+<li>use the "sleep" command to control the rate of fill/drain
+<ul>
+<li>your script will not respond to signals while it is in the sleep state</li>
+</ul>
+</li>
+</ul>
+<p>Show me your progress at the end of lab, you are allowed to collaborate with your neighbours and/or work in pairs.&nbsp; There must be working code for every group of 2 people.</p>
+<p><img src="PastedImage_2bej7qt9vcm2d33b8dqnm1yr52tat0ad00123315693.png" alt="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></p>
+</body>
+</html>

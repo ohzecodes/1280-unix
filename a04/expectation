@@ -1,0 +1,93 @@
+
+Use best practices to get full marks.
+
+Best practices include:
+
+    code formatting with proper indentation
+    meaningful variable names
+
+Implement the following 3 'sh' scripts
+
+allglobs.sh [/11]
+
+Write an 'sh' script called 'allglobs.sh' that:
+
+    accepts 1 or more globs as arguments
+    if no arguments are given, prints a usage message and terminates with failure
+    is a filter
+    displays only the lines of input that match all of the given globs
+        use a case statement to do the glob evaluation
+    handles spaces correctly
+
+eg:
+
+$ printf 'abc\n123\nabc123\n123abc\na3isok\na   3\n' | ./allglobs.sh 'a*' '*3*'
+abc123
+a3isok 
+a   3
+$ printf '   3   spaces   \n' | ./allglobs.sh '*   *'
+   3   spaces   # [line ends here]
+$ printf '   3   spaces   \n' | ./allglobs.sh '* *' | wc 
+  1  2  17   # [ 9 spaces + 7 characters + 1 newline ]
+
+countchars.sh [/11]
+
+Write an 'sh' script called 'countchars.sh' that:
+
+    accepts 1 or more characters as arguments
+        you may assume that any argument is exactly one character, and not '\n'
+    if no arguments are given, prints a usage message and terminates with failure
+    is a filter
+    counts the occurrences of the given character(s) on each line.
+    gives its output in columns delimited by a space character
+
+eg:
+
+$ printf 'abcdcba\nabbcccdddd\n' | ./countchars.sh 'a' 'd' 'c' 'e'
+2 1 2 0 
+1 4 3 0
+
+snapshot.sh [/16]
+
+Write an 'sh' script called 'snapshot.sh' that:
+
+    creates a backup of the current directory (non-recursive)
+    all backups go into a './.snapshot' directory
+    maintains 10 such backups, numbered 0-9
+        0 being most recent, 9 being oldest
+    each time snapshot.sh is run
+        previous backups have their name incremented by 1
+        any backups beyond #9 are deleted
+        a new backup 0 is created
+        the contents of the current directory are copied into ./.snapshot/0
+    the script exits failure if a snapshot cannot be moved, removed, or created, or if file(s) cannot be copied into snapshot 0; success otherwise
+    you may assume that the only items present in ./.snapshot were placed there by this script
+    use -v flag from various utilities to get logging
+
+eg:
+
+$ rm -rf foo; mkdir foo; cd foo; touch a b; mkdir bar
+$ ../snapshot.sh
+mkdir: created directory './.snapshot/0'
+'a' -> './.snapshot/0/a'
+'b' -> './.snapshot/0/b'
+cp: -r not specified; omitting directory 'bar'
+$ for i in {1..10} ; do ../snapshot.sh ; done >& /dev/null
+$ ../snapshot.sh
+removed './.snapshot/9/a'
+removed './.snapshot/9/b'
+removed directory './.snapshot/9'
+'./.snapshot/8' -> './.snapshot/9'
+'./.snapshot/7' -> './.snapshot/8'
+'./.snapshot/6' -> './.snapshot/7'
+'./.snapshot/5' -> './.snapshot/6'
+'./.snapshot/4' -> './.snapshot/5'
+'./.snapshot/3' -> './.snapshot/4'
+'./.snapshot/2' -> './.snapshot/3'
+'./.snapshot/1' -> './.snapshot/2'
+'./.snapshot/0' -> './.snapshot/1'
+mkdir: created directory './.snapshot/0'
+'a' -> './.snapshot/0/a'
+'b' -> './.snapshot/0/b'
+cp: -r not specified; omitting directory 'bar'
+$

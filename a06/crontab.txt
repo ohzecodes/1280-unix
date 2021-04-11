@@ -1,0 +1,25 @@
+runs the script 'backup.sh' every Sunday morning at 3am
+
+crontab 0 3 * * 0  backup.sh
+
+
+deletes all files ending in .o in your home directory,
+and all directories under it, every day at 3am
+
+ crontab 0 3 * * *  find . -name "*.o" -exec rm -rf {} \;
+
+
+runs 'payroll.sh' at 6am on the 1st and 15th of every month
+
+ crontab 0 6 1,15 * *  payroll.sh
+
+
+runs 'heartbeat.sh' every other minute of every day
+ crontab * * * * * heartbeat.sh
+
+
+runs 'firsthalf.sh' at 6am on days 1 through 15 every month.
+
+crontab 0 6 1-15 * *  firsthalf.sh
+
+

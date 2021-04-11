@@ -1,0 +1,121 @@
+
+Name: DO NOT INCLUDE YOUR NAME
+ID: 100327154
+
+// the work that you submit must be your own
+// cite your sources 
+
+[/44]
+
+// [-4] your solution must be a plain text file (not a word document).
+// [-4] your solution includes your name.
+
+
+
+citation:
+	all of the infomation is either from the slides, personal knowlegde, or textbook.
+
+
+q0) [0] Who is X gon' give it to?
+
+	Ya'.
+
+
+q1) [2] Give an abstract, high-level description of what a computer is.
+	1. A computer is a machine which processes and manipulate data
+
+
+q2) [5] List the elements of a Von Neumann Machine.
+
+	1. Input device
+	2. Output device
+	3. Main memory 
+	4. Secondary memory
+	5. CPU
+
+q3) [3] Name the two types of software, and give a brief description of each.
+	
+	1. Application software: apps used by user to complete tasks 
+	2. System Software: used to manage capability of computer 
+
+q4) [2] What are the 2 Roles of the OS?
+	
+	1. Manage hardware resources 	   
+	2. Provide obstruction for resources
+
+q5) [5] What are the OS's management tasks?
+	
+	1.Process Management
+	2.Memory Management
+	3.File System Management
+	4.Device Management
+	5.Communication Management
+
+q6) [1] What is a process?
+	1. Executing instance of a program 
+
+
+q7) [2] Computer interaction can be thought of in layers. What differentiates the layers?
+	
+	Each layer has different uses. they are differentiated by  the services they provide to the layer above them.
+	for example:
+		the application layer provides funchionality to the user. 
+		the OS provides services to applications
+		the Drivers provides interface betweenOS and hardware
+		the hardware does the actual work.
+
+
+q8) [1] What allows the OS to execute commands with more privileges than applications?
+	
+	root permission/OS privilege (Sudo)
+
+
+q9) [1] How does a user application access a service provided by the OS?
+	system call 
+
+q10) [1] What is it called when the CPU switches protection modes (user mode to kernel mode or vice versa)?
+	
+	Multimode execution
+
+q11) [1] How does a user application pass parameters as part of a request to the OS?
+	System calls
+
+q12) [2] If a machine has 4 logical processors, can its operating system support more than 4 processes? Explain.
+
+	yes with hyperthreading 1 single processor can process 2 processes. so 4 logical procesors can process upto 8 proceses 
+
+
+q13) [1] Why was/is Unix so portable?
+	Unix is written in a high level programing language and so its availible on a variety of platforms.
+
+q14) [5] Name the parts of a UNIX system.
+	1. Applications 
+	2. Shell
+	3. Library routines
+	4. Kernal
+	5. System calls 
+
+q15) [3] Describe the Unix design philosophy
+	One program does one task. The program does the Task well.
+	Multiple program can be combined to do one big task. 
+
+
+q16) [7] List the 4+3 types of files in UNIX, and give their symbol that represents them as from ls -l
+
+	1. Directories(d)
+	2. links(l)
+	3. devices(c,b)
+	4. named pipe (p)
+	5. Socket (s)
+	6. door (D)
+	7. Regular / Ordinary / Normal / Data files (–)
+	 
+
+
+q17) [1] On a Unix machine, where are your personal files stored?
+	1.	Home Directory
+
+q18) [1] Give three places to look for more info about shell commands.
+	https://linux.die.net/	
+	http://man7.org/linux/man-pages/ 
+	manual pages (with man command)

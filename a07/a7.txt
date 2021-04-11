@@ -1,0 +1,194 @@
+
+D/L and extract
+wget http://mylinux.langara.ca/~jhilliker/1280/books.tar.bz2
+wget http://mylinux.langara.ca/~jhilliker/1280/emp.txt
+
+*****
+* Assume questions are case-sensitive unless told otherwise (or to convert case).
+* Each question is accompanied by a hex number that is the first digit(s) of the shasum of the correct output.
+* Include the specified command, and the shasum of the output.
+eg:
+0) Display all lines that start with the substring "the". [0]
+
+	cat * | grep "^the" | shasum
+	092dda5fe38fe9367e8da9bab3ac231f7b8b6ab6  -
+
+
+[20; 2 each] ***** PART 1) GREP
+* Answer GREP questions w/r/t the books corpus.
+* In the GREP section, you may only use CAT and GREP, unless stated otherwise.
+
+1-3) Using BREs, give 3 different ways to display all lines that start with 
+the substring "the", but not the word "the". [7]
+
+
+
+1. grep -h '^the\w\w*' * |shasum
+7793c9057da7a55b53811289d561f5f8808c7961  -
+2. grep -h '^the[[:alnum:]][[:alnum:]]*' * |shasum
+7793c9057da7a55b53811289d561f5f8808c7961  -
+3. grep -h '^the\w.*' * | shasum
+7793c9057da7a55b53811289d561f5f8808c7961  -
+
+
+
+4) Using BRE(s), display all lines that start with a "t", but not with 
+the substring "the" [d]
+
+
+grep -h '^t[^\(he\)]' * |shasum                                               
+dbd84be6654e61ad46c39e8679171eb096413687  -
+
+
+5) Using BREs, display all lines that contain the word "the", 
+but does not contain the word "the" at the beginning or end of the line. [2]
+	eg: REJECT "the the x", "x the the"
+	eg: ACCEPT "x the x", "them the there"
+
+grep -hv '^the\b' * | grep -v '\bthe$' | grep '\bthe\b' | shasum
+209e81cc9a7a2b3a6ca1bc8d1a94cff76ffa5ef5  -
+
+6) Using BREs, display all lines that contain an occurrence of
+ the word "the" that is not at the beginning or end of a line. [0]
+	eg: REJECT "the x", "x the"
+	eg: ACCEPT "x the x", "the the x" "x the the", "the the the"
+
+
+cat * | grep -h 'the' |grep  -ve '^[the]' |grep  -vE '[^the]$' | shasum
+0fe80801ebb04cd96acbad8c65c595b8c7af0c50  -
+
+7) Display all lines that contain the substring "the" that is 
+not the word "the". [5]
+	eg: ACCEPT "mother", "then the", "the thermos" 
+	EG: REJECT "the", "the a and the b"
+
+grep -hEe '\w*the\w+' -Ee '\w+the\w*' * |shasum                                                           
+519c703c478068889f3f70aa43bb20e1757eaf01  -
+
+
+8) Display the word that most frequently precedes (comes before) 
+the word "the". Use only cat, grep, sort, uniq.  No awk, sed, cut, head, 
+or tail. [c]
+
+cat * | 
+grep -Eho '\b\w+ the\b' |
+sort | 
+uniq -c | 
+sort -nr | 
+grep -Eo -m1 '[[:digit:]]{4,} \w+' | 
+grep -o '\b[a-zA-Z]*' |
+shasum  
+c8ca4cfbb176e5cfa981da4dbd26348cf9ebdf0d  -
+
+
+9) Only display the lines before and after a line that contains 
+the substring "the", but do not display any lines that contain 
+the substring "the". [e9]
+
+cat * | grep -C1 'the' --no-group-separator | grep -v 'the' | shasum
+e900d7bfe8a35c60421f02bccc976764369ef3db  -
+
+
+10) Using only grep and cut (no cat), display every 5th line, 
+starting with line 1. No cat, awk, or sed. [27]
+
+TODO using grep use aws 
+
+grep  "^.*$"  *| grep -n "^.*$"   | 
+ grep  '^[[:digit:]]*[16]:' | 
+ cut -d ':' -f3  | 
+ shasum
+
+
+
+
+[20; 2 each] ***** Part 2) SED
+* In the SED section, you may only use CAT and SED unless stated otherwise.
+
+11) Using only sed (no cat), display every 5th line, starting with line 1. [27]
+
+	sed -n '1~5p' *  | shasum
+	272416f803f75cd9baff20d55b95acb17ab45ed0  -
+
+
+12) Replace every occurrence of the word "good" with "better" and "better" with "best". [c]
+	eg: "good, better, best. never let it rest. 'til your good is better and your better is best."
+	-> "better, best, best. never let it rest. 'til your better is best and your best is best."
+
+cat * | sed 's/\bbetter\b/best/g'  | sed 's/\bgood\b/better/g' | shasum 
+c0ea7780319d14a5f50d431fb087029e956c63a6  -   
+
+13) Place the line "BEFORE" before every line containing the word "before", 
+and the line "AFTER" after every line containing the word "after" 
+[no quotes]. Do not use 's/' [6]
+
+cat *  | sed '/\bbefore\b/i BEFORE' | sed '/\bafter\b/a AFTER' | shasum
+63c9616955decc7098e25bf93a1df5c747c6cc93  - 
+
+
+14) Swap the first and last word on every line. [c]
+	eg: '"Hi how are you?"' -> '"you how are Hi?"'
+
+sed -E 's/(^[a-zA-Z]*\b)(.*)(\b[a-zA-Z]+$)/\3 \2 \1/g' * | shasum 
+c7200b34cd04c1c21d4ce64370004df79f9502e3  -   
+
+15) Replace every word with a number of asterisks equal to its length. [4]
+	eg: "and that she has counted me, among the dead."
+	->  "*** **** *** *** ******* **, ***** *** ****."
+
+cat * |  sed -E 's/\w/*/g' |shasum                                                                             
+4c2887b28ed51402de11431b7738a34c5c0ff5dd  -
+
+
+16) On every line that does not contain the substring "safe", 
+replace all occurrences of the substring "out" with "OUT". [4]
+
+cat * | sed -E '/(\w)?safe(\w)?/!s/(\b)?out(\b)?/OUT\1/g'  | shasum
+4387d2d027422a0f51ee9632958807010673607e  -
+
+
+
+17) For all lines where the same word occurs twice in a row (with an non-zero number of non-word characters between them), 
+replace the second occurrence with the word 'jinx'. [0]
+
+cat *  | 
+sed -E 's|\b(\w+)(\W+)(\1)\b|\1\2jinx|g'  | 
+shasum
+
+023d8ec9acd7c069b7961b98ee0ede53e194433d  -
+
+							  					
+
+18) Double every word that contains "two" as a substring, but do not double the word "two" itself. Put one space between them. [a]
+	eg: 'two networks of driftwood for two trustworthy twopence'
+	-> 'two networks networks of driftwood driftwood for two trustworthy trustworthy twopence twopence'
+
+cat *| sed  -E 's/\b(\w*two\w+\b)/\1 \1/g' | shasum
+a5aa1d7070a1240c462466a75a0fbbe31dd52d16  -
+
+
+19) Remove the line that follows any line that contains the word "missing". [8]
+	eg: 'a \n missing\n b \n c  \n' -> 'a\nmissing\nc\n'
+
+// used stack overflow for the first `sed` https://stackoverflow.com/questions/38672680/replace-newlines-with-literal-n/38674872
+
+cat *  |  sed -E ':a;N;$!ba;s/\r{0,1}\n/\%/g' |  sed -E 's|(missing([^%]*%){1})([^%]*%)|\1|g' |  sed 's/%/\n/g' | shasum
+8b712058c5ac4c5ee45bb18862c185c387de44a7  -
+
+
+20) Remove all characters within parenthesis (on the same line). Take the outermost parenthesis. [9]
+	eg: "a (b (c) d) e" -> "a () e"
+	eg: "a (b) (c) (d) e" -> "a () e"
+	eg: "a ((((((b) c" -> "a () c"
+	eg: "a (b" -> "a (b"
+
+
+cat * |  sed -E 's|[\(].*[\)]|\(\)|g ' | shasum
+9d6c64629f0250a458de62d917b27a3430e30ab6  -
+
+
+
+
+
+
+

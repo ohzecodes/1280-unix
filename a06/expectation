@@ -1,0 +1,76 @@
+
+CPSC-1280-001 - Unix Tools and Scripting 31093.201930
+Course Home
+HELP
+Side Panel
+Expand side panel
+Breadcrumb:
+
+    Table of Contents 04 - Processes & SysAdmin a06: processes & signals
+
+a06: processes & signals
+Instructions
+child.sh [/6]
+
+Create an sh script, 'child.sh', that:
+
+    on start, prints a status message including its pid: 'Child 7894: starting'  (where 7894 is the child's pid)
+    waits for an incoming signal
+        SIGUSR1
+            prints: "Child 7894: success"  (where 7894 is the child's pid)
+            exits success
+        SIGUSR2
+            prints "Child 7894: failure"  (where 7894 is the child's pid)
+            exits failure
+
+waitall.sh [/17]
+
+Create an sh script 'waitall.sh', that:
+
+    accepts a single command line argument: the number of child processes to launch
+    if any other number of arguments is given
+        prints an informative usage message
+        exits with status 2
+    launches the given number of instances of ./child.sh in parallel in the background
+    waits for all of the child processes to finish
+    reports the children (by pid) that exited with success
+        eg: "Successes: 7894 7896"
+    reports the children (by pid) that exited with failure
+        eg: "Failures: 7895"
+    success and failure lines should still appear even if there were none
+    if there were no failures, exits with success, otherwise exits with status 1
+    if the waitall.sh script terminates for any reason, it should kill all of its child processes (without displaying error messages) and it should exit with an appropriate exit status
+
+waitany.sh [/15]
+
+Create an sh script 'waitall.sh', that:
+
+    accepts a single command line argument: the number of child processes to launch
+    if any other number of arguments is given
+        prints an informative usage message
+        exits with status 2
+    launches the given number of instances of ./child.sh in parallel in the background
+    waits for child processes
+    if all child process exit with failure
+        displays: 'All failed'
+        exits with status 1
+    if any child process succeeds
+        immediately terminates all child processes
+        exits success
+    if the waitany.sh script terminates for any reason, it should kill all of its child processes (without displaying error messages) and it should exit with an appropriate exit status
+
+crontab [/15;  3 each]
+
+Submit a file, crontab.txt, that, when used as your crontab file:
+
+    runs the script 'backup.sh' every Sunday morning at 3am
+    deletes all files ending in .o in your home directory and it's sub-directories (only delete '.o' files), every day at 3am
+    runs 'payroll.sh' at 6am on the 1st and 15th of every month
+    runs 'heartbeat.sh' every other minute of every day
+    runs 'firsthalf.sh' at 6am on days 1 through 15 (inclusive) every month.
+
+    Activity Details
+
+Due October 31 at 11:55 PM
+Starts Oct 24, 2019 1:30 PM
+Last Visited Oct 30, 2019 5:18 PM

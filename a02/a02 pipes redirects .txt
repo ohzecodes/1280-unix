@@ -1,0 +1,162 @@
+
+Do not include name or student ID.
+
+Submit via your handin repository on gitlab before the deadline.
+Ensure that you have submitted the repository's URL via the d2l quiz.
+
+Deadline: 2019-09-25 23:55:00-07:00
+Late Deadline: 2019-09-26 23:55:00-07:00
+
+----- Grading -----
+[/50] TOTAL
+	[/15] q1-4
+	[/27] q5
+	[/08] q6
+
+
+	
+	[/-5] not a plain text file
+	[/-5] repository not private
+	[/-5] instructor not added as developer on project
+	[/-5] includes name, student id, or other identifying info
+	[/-10] not submitted via repository
+	[/20%] late penalty (24 hours)
+--------------------
+
+For all of these questions, you may NOT use:
+	grep, sed, awk, or perl
+	if, for, while, until, case, or read
+
+
+Questions #4 onwards end with some digits in square brackets.  Those digits represent the starting digits of the shasum of the correct output.  
+For those questions, provide BOTH the command, and the resulting shasum of the output as in question 0 below.
+
+q00) [0] Give a command to replace all of the capital X characters with lower case x characters in the books corpus. [e]
+
+	cat * | tr 'X' 'x' | shasum
+	e424cc5e4fae61474f7a7622b2daeb2340999602  
+
+--------------------------------------------------------------------
+
+
+q01) [4] Suppose there are multiple copies of the program "foo" on your machine: one in the current directory, one in your home directory, one in /usr/bin, and one in /bin.
+
+	1)	Without any additional information, which one will run if you simply type "foo" on the command line? 
+		/bin
+	2) Give the command to run the one in the current directory?
+		./foo
+	3) Give the command to run the one in your home directory?
+		. ~/foo
+	4) Give the command to run the one in /usr/bin?
+		. /usr/bin/foo
+
+..
+
+q02) [3] For each of the following commands, state:
+	i) which program opens and reads the input file, and
+	ii) how shasum receives the file's contents.
+
+	a)	shasum Meditations.txt
+		i)  shasum
+		ii) dirrectly
+	b)	cat Meditations.txt | shasum
+		i) cat opens and read the file 
+		ii)  through stdout of cat 
+	c) 	shasum < Meditations.txt
+		i) stdin opens the file 
+		ii) and then gives it to shasum for reading and shasuming
+
+..
+
+q03) [4] give a command to display the reverse ordering of the elements in the path variable (colon delimited). eg: "1a:2b:3c:4d" -> "4d:3c:2b:1a".
+
+
+	echo $PATH| tac -s ":" | tr "\n" ":" |  cut -d ":" -f 1-19
+
+more dynamic???
+
+
+q04) [4] give a set of commands that will create a file "foo" that contains 128 'y' characters followed by 128 'n' characters.  The file should contain only those 256 characters. [6]
+
+	seq 1 128 | tr -s [:digit:] y | tr -d "\n" > foo; seq 1 128 | tr -s [:digit:] n | tr -d "\n" >> foo
+	6702919bb0b5dd155bf117316c53ff64a2e52be3  -
+..
+
+q05) [27] for the purpose of this question a "word" is defined to be a contiguous sequence of alpha-numeric characters. Answer all questions w/r/t the books corpus (wget http://mylinux.langara.ca/~jhilliker/1280/books.tar.bz2 ; tar -xf books.tar.bz2). Give a command to:
+
+	a) [1] remove all blank lines. "Blank," for this question, means "doesn't contain any characters." [0]
+
+		cat * | tr -s "\n"
+		062640daa544de42dee3d173d4e7c3824ac045ab  -
+	..
+
+	b) [2] remove the last character of every line of the books corpus. [d]
+
+		cat * | rev | cut -c 2- | rev
+
+		df6f31d009b8f77ac9913889062e88299f07ddd1  -
+
+		https://unix.stackexchange.com/questions/83038/remove-last-character-from-line
+	..
+
+	c) [2] determine how often the letter 'u' or 'U' appear in the books corpus. [1]
+		cat * | tr -dc "u""U" | wc -c 
+		12884b26204b7a04b039e9b452920b53b6e944b8  -
+	..
+
+	d) [2] display the total word count (number of words, including duplicates). Display only this number. [c]
+		cat * | tr -c  [:alnum:] "\n"  | wc -w 
+	
+		c6a59dab405ab992506a89a4eb0741acdce995b5  -
+	..
+
+	e) [4] display the number of unique words (the word count, excluding duplicates), case insensitive (use tr and posix classes). [4]
+		cat * |tr [:upper:] [:lower:] | tr -c  [:alnum:] "\n"  |tr -s "\n" | sort | uniq  |wc -w 
+		4cdebcf6ce60ddc9df98e9b2db12f95fdf7f7afe  -
+	
+	
+	..
+
+	f) [4] Display the number of words that occur only once, case insensitive. [a]
+		
+		cat * |tr [:upper:] [:lower:] | tr -c  [:alnum:] "\n"  |tr -s "\n" | sort | uniq -c | sort | cut -c 7| uniq -c| head -n 1| rev | cut -c 2- | rev| tr -d " " 
+	
+		a3b2c32b17ba04a6928ea3b7bf6c01c86098b7cd  - 
+	..
+
+	g) [4] display the name of the file in the books corpus that contains the fewest newline characters. [0]
+
+		
+		wc -l * | sort -n | head -n1 | cut -d " " -f 5-  
+		0078cecbaca3b526d3fe0fe72d86fbe5dc9b1f29  -
+
+	..
+
+
+
+	h) [8] display the 10 most frequently occurring words (case insensitive) in descending order (most frequent first), one per line. Display only those words (no counts). Display them in lower case. [a]
+
+		cat * |tr [:upper:] [:lower:] | tr -c  [:alnum:] "\n"  |tr -s "\n" | sort | uniq -c | sort | tail | tac | tr -cd "[:alpha:]\n"
+
+		ab58159719bafa18ac33426fe3fad73b7bc5651c  -
+
+	..
+
+
+q06) [8] w/r/t http://mylinux.langara.ca/~jhilliker/1280/pokemon.csv
+
+	a) [7] give a command to display the most common type of pokemon (fields 3&4)? If a pokemon has 2 types, count both. [b]
+		eg: lines 5&6 would be counted as: 2 Fire, 1 Flying.
+
+		(cat pokemon.csv | cut -d "," -f 3; cat pokemon.csv | cut -d "," -f 4  )| sort | uniq -c | tail -n 1 | tr -cd '[:alpha:]\n'		
+		b73bc363f7397cac1403eee10777faa6a937956e  -
+	..
+
+	b) [1] how often does that type of pokemon occur? [6]
+		(cat pokemon.csv | cut -d "," -f 3; cat pokemon.csv | cut -d "," -f 4  )| sort | uniq -c | tail -n 1 | tr -dc '[:digit:]\n' 
+
+		6465bbde86f5c543bd01955e3cfe6edd262b05b1  -
+	..
+
+
+	

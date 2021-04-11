@@ -1,0 +1,112 @@
+Instructions
+dupes.sh [/38]
+
+Write an 'sh' script called 'dupes.sh' that:
+
+    Displays files that have duplicate contents.
+        examines a list of files and compares all of the files to each other
+        for each file
+            display the filename
+            if any other file has the same contents
+                display that other file's filename on the same line
+                listed files should be separated by colon ' : '
+        if there are any duplicates, keep comparing the other files
+            but exit with status code 1 when done
+        if there are no duplicates
+            exit with status code 0 when done
+    Runs in 2 different modes
+        Mode 1: when command line arguments are given
+            compares the files given as arguments
+            if any argument is not a file
+                prints ':fName: is not a file' where "fName" is the name of the non-file
+                keeps comparing other files, but exits with status code 2 when done
+            files are compared in the order given
+            behaviour is undefined if the same filename is given more than once
+        Mode 2: no command line args given
+            compares all of the files in the current directory
+            files are compared in ASCII sort order (this should happen automatically)
+    create a function "hasDupes"
+        determines if a given (single) file is a duplicate of any of the other files passed as arguments
+            returns success if the file has a duplicate, failure if no duplicate
+        $1 = the filename to compare against all the other files
+        $2 ... = the other filenames to compare it against
+        Modes 1 & 2 above should both call this function to do the comparison work
+
+hasDupes / 17
+main / 19
+exit status / 2
+
+eg:
+$ rm -rf dupes.test && mkdir dupes.test && cd dupes.test && \
+echo a > f1 && echo b > f2 && echo c > f3 && \
+cp f3 f4 && cp f1 f5 && cp f1 f6
+
+$ { ../dupes.sh; echo $?; } | tee >(shasum)
+f1:f5:f6
+f2
+f3:f4
+f4:f3
+f5:f1:f6
+f6:f1:f5
+1
+329ab8867907bdffe3330c97963fdd6d95608290  -
+
+$ { ../dupes.sh *; echo $?; } | tee >(shasum)
+f1:f5:f6
+f2
+f3:f4
+f4:f3
+f5:f1:f6
+f6:f1:f5
+1
+329ab8867907bdffe3330c97963fdd6d95608290  -
+
+$ { ../dupes.sh f{1,2,3,5,6} ; echo $?; } | tee >(shasum)
+f1:f5:f6
+f2
+f3
+f5:f1:f6
+f6:f1:f5
+1
+767205de5cf926ae2d80ed0eb88dcc6402f5fe35  -
+
+$ { ../dupes.sh f1 f2 ; echo $?; } | tee >(shasum)
+f1
+f2
+0
+fb173cfe1d25266a0e78c12999fb59a7c9bc0867 -
+
+$ touch aaa; mkdir sub dir
+
+$ { ../dupes.sh ; echo $?; } | tee >(shasum)
+aaa
+f1:f5:f6
+f2
+f3:f4
+f4:f3
+f5:f1:f6
+f6:f1:f5
+1
+a014cefa5512f310985b6efe67f45defd4e6f971  -
+
+$ { ../dupes.sh sub f{1,5,2} ; echo $?; } | tee >(shasum)
+:sub: is not a file
+f1:f5
+f5:f1
+f2
+2
+bd5be7d283da65b4f435fdb2e8f53e4a1d76195a  -
+
+$ { ../dupes.sh * ; echo $?; } | tee >(shasum)
+aaa
+:dir: is not a file
+f1:f5:f6
+f2
+f3:f4
+f4:f3
+f5:f1:f6
+f6:f1:f5
+:sub: is not a file
+2
+f58a46164f7cd374923431bacc1c7878bd88c463  -
+

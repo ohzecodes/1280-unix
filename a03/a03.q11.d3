@@ -1,0 +1,14 @@
+--- a03.q12.d1	2018-05-24 05:57:07.761515207 +0000
++++ a03.q12.d2	2018-05-24 05:58:13.837521380 +0000
+@@ -1,8 +1,8 @@
+ I am a log file
+-I may or may not have been tampered with
++I have not been tampered with
+ I hold records
+ that show
+-who has accessed things
+-and who has been denied access to things
++who has been denied access to things
+ I am useful for assigning blame
+ and sometimes for fixing things
++but always for proving innocence
